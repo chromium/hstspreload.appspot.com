@@ -98,14 +98,14 @@ Form.prototype = {
   }
 };
 
-function statusString(status, issues, domain) {
+function statusString(status, issues, domain, isRemoval) {
   switch (status.status) {
     case 'unknown':
       return 'Status: ' + domain + ' is not preloaded.';
     case 'pending':
       return 'Status: ' + domain + ' is pending submission to the preload list.';
     case 'preloaded':
-      if (status.bulk) {
+      if (status.bulk && !isRemoval) {
         switch (worstIssues(issues)) {
           case 'warnings':
             return 'Status: ' + domain + ' is currently preloaded, but has the following issues:';
@@ -233,7 +233,7 @@ PreloadController.prototype = {
   },
 
   showResults: function(view, domain, issues, status) {
-    view.setStatus(statusString(status, issues, domain));
+    view.setStatus(statusString(status, issues, domain, false));
 
     var showForm = false;
 
@@ -323,7 +323,7 @@ RemovalController.prototype = {
   },
 
   showResults: function(view, domain, issues, status) {
-    view.setStatus(statusString(status, issues, domain));
+    view.setStatus(statusString(status, issues, domain, true));
 
     var showForm = false;
 
